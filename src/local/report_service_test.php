@@ -14,4 +14,22 @@ class report_service_test extends \advanced_testcase {
         $this->resetAfterTest(true);
     }
 
+    public function test_create_report_valido(): void {
+        $generator = $this->getDataGenerator();
+        $user = $generator->create_user();
+
+        $data = (object) [
+            'userid' => $user->id,
+            'itemtype' => 'post',
+            'itemid' => 101,
+            'reason' => 'Contenido inapropiado',
+        ];
+
+        $report = report_service::create_report($data);
+
+        $this->assertNotEmpty($report);
+        $this->assertEquals($user->id, $report->userid);
+        $this->assertEquals('post', $report->itemtype);
+    }
+
 }
