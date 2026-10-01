@@ -32,4 +32,23 @@ class report_service_test extends \advanced_testcase {
         $this->assertEquals('post', $report->itemtype);
     }
 
+    public function test_create_report_duplicado(): void {
+        $generator = $this->getDataGenerator();
+        $user = $generator->create_user();
+
+        $data = (object) [
+            'userid' => $user->id,
+            'itemtype' => 'post',
+            'itemid' => 101,
+            'reason' => 'Primer reporte',
+        ];
+
+        // Se crea el primer reporte válido
+        report_service::create_report($data);
+
+        // Intentar crear exactamente el mismo reporte debe lanzar una excepción
+        $this->expectException(\moodle_exception::class);
+        report_service::create_report($data);
+    }
+
 }
