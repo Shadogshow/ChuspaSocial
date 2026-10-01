@@ -51,4 +51,19 @@ class report_service_test extends \advanced_testcase {
         report_service::create_report($data);
     }
 
+    public function test_create_report_itemtype_invalido(): void {
+        $generator = $this->getDataGenerator();
+        $user = $generator->create_user();
+
+        $data = (object) [
+            'userid' => $user->id,
+            'itemtype' => 'itemtype_no_existente',
+            'itemid' => 101,
+            'reason' => 'Prueba itemtype inválido',
+        ];
+
+        $this->expectException(\invalid_parameter_exception::class);
+        report_service::create_report($data);
+    }
+
 }
